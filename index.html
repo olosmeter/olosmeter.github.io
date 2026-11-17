@@ -47,12 +47,17 @@ button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18p
 .stamp{position:absolute;right:10px;bottom:56px;width:78px;height:78px;border:3px solid var(--chili);border-radius:50%;color:var(--chili);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:14px;line-height:1.15;transform:rotate(-14deg);opacity:.85;background:rgba(255,253,245,.7)}
 .share{display:grid;gap:8px;margin-top:16px}
 .wa{background:var(--leaf)}.fb{background:#1877f2}.cp{background:var(--kantha)}.again{background:#fff;color:var(--kantha);border:3px solid var(--kantha)}
-.ph{background:#c4781a}.sv{background:var(--kantha)}.shr{background:var(--leaf)}
-#pv{display:none;margin-top:16px;text-align:center}
-#pv.show{display:block}
-#pv img{width:100%;height:auto;border-radius:14px;box-shadow:0 8px 22px rgba(31,37,68,.25);display:block}
-#pv .share{margin-top:10px}
-.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
+.sv{background:#c4781a}
+#pv{margin-top:16px;text-align:center}
+.ptitle{font-weight:700;margin:0 0 8px;color:var(--kantha)}
+.gen{margin:0;padding:30px 12px;border:3px dashed var(--gold);border-radius:14px;color:var(--mute);font-size:16px;cursor:pointer}
+#pimg{display:none;width:100%;height:auto;border-radius:14px;box-shadow:0 8px 22px rgba(31,37,68,.25)}
+#pv.ready #pimg{display:block}
+#pv.ready .gen{display:none}
+.hint{display:none;font-size:13px;color:var(--mute);margin:8px 0 0}
+#pv.ready .hint{display:block}
+.msg{font-size:14px;color:var(--kantha);background:#fff3d6;border-radius:10px;padding:0;margin:10px 0 0;text-align:center}
+.msg:not(:empty){padding:10px 12px}
 .note{font-size:13px;color:var(--mute);text-align:center;margin:18px 0 0}
 @media(max-width:380px){.stamp{display:none}}
 @media(prefers-reduced-motion:reduce){.sloth{animation:none}.fill,.mark{transition:none}}
@@ -87,21 +92,20 @@ button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18p
 <p class="date" id="dt"></p>
 <div class="stamp" aria-hidden="true">সত্যায়িত<br>অলস</div>
 </div>
-<div class="share">
-<button class="ph" id="ph">ফটোকার্ড বানান 🖼️</button>
 <div id="pv">
+<p class="ptitle">আপনার ফটোকার্ড 🖼️</p>
+<p class="gen" id="gen">ফটোকার্ড তৈরি হচ্ছে…</p>
 <img id="pimg" alt="আপনার অলসতা সনদের ফটোকার্ড">
+<p class="hint">ছবিতে লম্বা চেপে ধরেও সেভ করতে পারবেন।</p>
+</div>
 <div class="share">
-<button class="sv" id="sv">ছবি সেভ করুন</button>
-<button class="shr" id="shr" style="display:none">ছবি শেয়ার করুন</button>
-</div>
-<p class="hint">সেভ না হলে ছবিতে চেপে ধরে "Download image" দিন।</p>
-</div>
-<button class="wa" id="wa">হোয়াটসঅ্যাপে পাঠান</button>
-<button class="fb" id="fb">ফেসবুকে শেয়ার করুন</button>
+<button class="sv" id="sv">⬇️ ছবি ডাউনলোড করুন</button>
+<button class="fb" id="fb">ফেসবুকে ছবি শেয়ার করুন</button>
+<button class="wa" id="wa">হোয়াটসঅ্যাপে ছবি পাঠান</button>
 <button class="cp" id="cp">লিংকসহ লেখা কপি করুন</button>
 <button class="again" id="again">আরেকজনের নাম দিন</button>
 </div>
+<p class="msg" id="msg" role="status"></p>
 </div>
 </div>
 <p class="note">এটা শুধুই মজার জন্য। রেজাল্ট নামের উপর নির্ভর করে, তাই একই নামে একই ফল আসবে।</p>
@@ -153,19 +157,18 @@ function measure(){
  card={name:name,pct:toBn(pct),pn:pct,title:r.t,rhyme:r.r,date:$("dt").textContent};
  $("pv").className="";
  current=name+" "+toBn(pct)+"% অলস! উপাধি: "+r.t+" 🦥\n"+r.r+"\n"+LINK_TEXT;
+ setMsg("");makePhoto();
  $("out").scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"});
 }
 $("go").onclick=measure;
 $("nm").addEventListener("keydown",function(e){if(e.key==="Enter")measure()});
-$("wa").onclick=function(){window.open("https://wa.me/?text="+encodeURIComponent(current+"\n"+location.href),"_blank")};
-$("fb").onclick=function(){window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(location.href)+"&quote="+encodeURIComponent(current),"_blank")};
 $("cp").onclick=function(){
  var txt=current+"\n"+location.href,b=$("cp");
  function done(){b.textContent="কপি হয়েছে ✅";setTimeout(function(){b.textContent="লিংকসহ লেখা কপি করুন"},2000)}
  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,function(){prompt("কপি করুন:",txt)})}
  else{prompt("কপি করুন:",txt)}
 };
-$("again").onclick=function(){$("pv").className="";$("nm").value="";$("out").className="";$("nm").focus();window.scrollTo(0,0)};
+$("again").onclick=function(){$("pv").className="";setMsg("");$("nm").value="";$("out").className="";$("nm").focus();window.scrollTo(0,0)};
 
 /* ===== ফটোকার্ড ===== */
 var SITE="olosmeter.github.io";
@@ -189,7 +192,7 @@ function drawCard(){
  c.fillStyle="#d94f30";c.font="700 230px "+FF;c.fillText(card.pct+"%",W/2,640);
  var bx=170,by=720,bw=740,bh=46,fw=bw*card.pn/100;
  rr(c,bx,by,bw,bh,23);c.fillStyle="#e6e9f3";c.fill();
- if(fw>0){c.save();rr(c,bx,by,bw,bh,23);c.clip();c.fillStyle="#f2b134";c.fillRect(bx,by,fw,bh);
+ if(fw>0){c.save();rr(c,bx,by,bw,bh,23);c.clip();c.beginPath();c.rect(bx,by,fw,bh);c.clip();c.fillStyle="#f2b134";c.fillRect(bx,by,fw,bh);
   c.strokeStyle="#f7c960";c.lineWidth=12;for(var k=-60;k<fw+60;k+=36){c.beginPath();c.moveTo(bx+k,by+bh);c.lineTo(bx+k+bh,by);c.stroke()}c.restore()}
  rr(c,bx,by,bw,bh,23);c.lineWidth=5;c.strokeStyle="#2b3a67";c.stroke();
  c.font="54px "+FF;c.fillStyle="#000";c.fillText("🦥",bx+Math.min(Math.max(fw,30),bw-30),by-8);
@@ -208,34 +211,62 @@ function drawCard(){
  c.fillStyle="#f2b134";c.font="600 38px "+FF;c.fillText(SITE,W/2,1312);
  return cv;
 }
+var seq=0;
+function setMsg(t){$("msg").textContent=t||""}
 function makePhoto(){
  if(!card)return;
- var b=$("ph");b.textContent="বানানো হচ্ছে…";
- var go=function(){
-  var cv=drawCard();
+ var my=++seq;
+ $("pv").className="";$("gen").textContent="ফটোকার্ড তৈরি হচ্ছে…";blobFile=null;
+ function fail(){$("gen").textContent="ছবি বানানো যায়নি। এখানে ট্যাপ করে আবার চেষ্টা করুন।"}
+ function go(){
+  if(my!==seq)return;
+  var cv;try{cv=drawCard()}catch(e){fail();return}
   cv.toBlob(function(bl){
-   if(!bl){b.textContent="ফটোকার্ড বানান 🖼️";alert("ছবি বানানো যায়নি, আবার চেষ্টা করুন।");return}
+   if(my!==seq)return;
+   if(!bl){fail();return}
    if(blobUrl)URL.revokeObjectURL(blobUrl);
    blobUrl=URL.createObjectURL(bl);
    try{blobFile=new File([bl],"olosmeter-sonod.png",{type:"image/png"})}catch(e){blobFile=null}
-   $("pimg").src=blobUrl;$("pv").className="show";
-   $("shr").style.display=(blobFile&&navigator.canShare&&navigator.canShare({files:[blobFile]}))?"block":"none";
-   b.textContent="আবার বানান 🖼️";
-   $("pv").scrollIntoView({behavior:"smooth",block:"nearest"});
+   $("pimg").src=blobUrl;$("pv").className="ready";
   },"image/png");
- };
- var txt=card.name+card.pct+card.title+card.rhyme+card.date+"অলসতা সনদএরপরিমাণউপাধিআপনিও নাম লিখে সনদ নিন০১২৩৪৫৬৭৮৯";
+ }
+ var txt=card.name+card.pct+card.title+card.rhyme+card.date+"অলসতা সনদএর পরিমাণউপাধিআপনিও নাম লিখে সনদ নিন০১২৩৪৫৬৭৮৯";
  if(document.fonts&&document.fonts.load){
-  Promise.all([document.fonts.load("700 40px 'Hind Siliguri'",txt),document.fonts.load("600 40px 'Hind Siliguri'",txt),document.fonts.load("400 40px 'Hind Siliguri'",txt)]).then(go,go)
+  Promise.all([700,600,400].map(function(w){return document.fonts.load(w+" 40px 'Hind Siliguri'",txt)})).then(go,go)
  }else{go()}
 }
-$("ph").onclick=makePhoto;
+$("gen").onclick=makePhoto;
+var inApp=/FBAN|FBAV|FB_IAB|Instagram|Messenger/i.test(navigator.userAgent);
+function canShareFile(){return !!(blobFile&&navigator.share&&navigator.canShare&&navigator.canShare({files:[blobFile]}))}
+function saveImage(){
+ if(!blobUrl){setMsg("ছবি এখনো তৈরি হচ্ছে, একটু পরে আবার চাপুন।");return false}
+ var a=document.createElement("a");a.href=blobUrl;a.download="olosmeter-sonod.png";a.style.display="none";
+ document.body.appendChild(a);a.click();document.body.removeChild(a);return true;
+}
 $("sv").onclick=function(){
- if(!blobUrl)return;
- var a=document.createElement("a");a.href=blobUrl;a.download="olosmeter-sonod.png";document.body.appendChild(a);a.click();document.body.removeChild(a);
+ if(saveImage()){
+  setMsg(inApp?"এই অ্যাপের ব্রাউজারে ডাউনলোড নাও হতে পারে। ছবিতে লম্বা চেপে ধরে Download image দিন, অথবা ⋮ থেকে Chrome এ খুলুন।":"ছবি ডাউনলোড হচ্ছে। Downloads বা গ্যালারিতে দেখুন। না এলে ছবিতে লম্বা চেপে ধরে Download image দিন।");
+ }
 };
-$("shr").onclick=function(){
- if(blobFile&&navigator.share){navigator.share({files:[blobFile],title:"আমার অলসতা সনদ",text:LINK_TEXT+" "+location.href}).catch(function(){})}
+function shareImage(fallback){
+ if(!blobUrl){setMsg("ছবি এখনো তৈরি হচ্ছে, একটু পরে আবার চাপুন।");return}
+ if(canShareFile()){
+  navigator.share({files:[blobFile],title:"আমার অলসতা সনদ",text:current+"\n"+location.href})
+   .catch(function(e){if(e&&e.name!=="AbortError")fallback()});
+ }else{fallback()}
+}
+$("fb").onclick=function(){
+ shareImage(function(){
+  saveImage();
+  setMsg("ছবি সেভ হয়েছে। ফেসবুকে পোস্ট লেখার সময় ছবিটা (গ্যালারি/Downloads থেকে) যোগ করুন।");
+  window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(location.href)+"&quote="+encodeURIComponent(current),"_blank");
+ });
+};
+$("wa").onclick=function(){
+ shareImage(function(){
+  setMsg("ছবি শেয়ার এই ফোনে সাপোর্ট করছে না, তাই লেখা পাঠানো হচ্ছে। ছবি চাইলে ডাউনলোড করে পাঠান।");
+  window.open("https://wa.me/?text="+encodeURIComponent(current+"\n"+location.href),"_blank");
+ });
 };
 </script>
 </body>
