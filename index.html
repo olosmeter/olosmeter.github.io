@@ -47,6 +47,12 @@ button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18p
 .stamp{position:absolute;right:10px;bottom:56px;width:78px;height:78px;border:3px solid var(--chili);border-radius:50%;color:var(--chili);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:14px;line-height:1.15;transform:rotate(-14deg);opacity:.85;background:rgba(255,253,245,.7)}
 .share{display:grid;gap:8px;margin-top:16px}
 .wa{background:var(--leaf)}.fb{background:#1877f2}.cp{background:var(--kantha)}.again{background:#fff;color:var(--kantha);border:3px solid var(--kantha)}
+.ph{background:#c4781a}.sv{background:var(--kantha)}.shr{background:var(--leaf)}
+#pv{display:none;margin-top:16px;text-align:center}
+#pv.show{display:block}
+#pv img{width:100%;height:auto;border-radius:14px;box-shadow:0 8px 22px rgba(31,37,68,.25);display:block}
+#pv .share{margin-top:10px}
+.hint{font-size:13px;color:var(--mute);margin:8px 0 0}
 .note{font-size:13px;color:var(--mute);text-align:center;margin:18px 0 0}
 @media(max-width:380px){.stamp{display:none}}
 @media(prefers-reduced-motion:reduce){.sloth{animation:none}.fill,.mark{transition:none}}
@@ -82,6 +88,15 @@ button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18p
 <div class="stamp" aria-hidden="true">সত্যায়িত<br>অলস</div>
 </div>
 <div class="share">
+<button class="ph" id="ph">ফটোকার্ড বানান 🖼️</button>
+<div id="pv">
+<img id="pimg" alt="আপনার অলসতা সনদের ফটোকার্ড">
+<div class="share">
+<button class="sv" id="sv">ছবি সেভ করুন</button>
+<button class="shr" id="shr" style="display:none">ছবি শেয়ার করুন</button>
+</div>
+<p class="hint">সেভ না হলে ছবিতে চেপে ধরে "Download image" দিন।</p>
+</div>
 <button class="wa" id="wa">হোয়াটসঅ্যাপে পাঠান</button>
 <button class="fb" id="fb">ফেসবুকে শেয়ার করুন</button>
 <button class="cp" id="cp">লিংকসহ লেখা কপি করুন</button>
@@ -112,7 +127,7 @@ var LINK_TEXT = "আপনিও নাম লিখে সনদ নিন!";
 var $=function(i){return document.getElementById(i)};
 function hash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))>>>0}return h}
 function toBn(n){return n.toLocaleString("bn-BD")}
-var current="";
+var current="",card=null,blobUrl="",blobFile=null;
 function measure(){
  var name=$("nm").value.trim();
  if(!name){$("err").textContent="আগে নাম লিখুন।";$("nm").focus();return}
@@ -135,6 +150,8 @@ function measure(){
   var n=0,step=Math.max(1,Math.round(pct/40)),t=setInterval(function(){
    n=Math.min(pct,n+step);$("num").textContent=toBn(n);if(n>=pct)clearInterval(t)},35);
  }
+ card={name:name,pct:toBn(pct),pn:pct,title:r.t,rhyme:r.r,date:$("dt").textContent};
+ $("pv").className="";
  current=name+" "+toBn(pct)+"% অলস! উপাধি: "+r.t+" 🦥\n"+r.r+"\n"+LINK_TEXT;
  $("out").scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"});
 }
@@ -148,7 +165,78 @@ $("cp").onclick=function(){
  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,function(){prompt("কপি করুন:",txt)})}
  else{prompt("কপি করুন:",txt)}
 };
-$("again").onclick=function(){$("nm").value="";$("out").className="";$("nm").focus();window.scrollTo(0,0)};
+$("again").onclick=function(){$("pv").className="";$("nm").value="";$("out").className="";$("nm").focus();window.scrollTo(0,0)};
+
+/* ===== ফটোকার্ড ===== */
+var SITE="olosmeter.github.io";
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath()}
+function wrapT(c,text,maxW){var words=text.split(" "),lines=[],cur="";words.forEach(function(w){var t=cur?cur+" "+w:w;if(c.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else{cur=t}});if(cur)lines.push(cur);return lines}
+var FF='"Hind Siliguri",system-ui,sans-serif';
+function drawCard(){
+ var W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;
+ var c=cv.getContext("2d");c.textAlign="center";c.textBaseline="alphabetic";
+ c.fillStyle="#2b3a67";c.fillRect(0,0,W,H);
+ c.strokeStyle="#f2b134";c.lineWidth=6;c.setLineDash([26,18]);c.strokeRect(24,24,W-48,H-48);c.setLineDash([]);
+ c.fillStyle="#f2b134";c.font="700 54px "+FF;c.fillText("🦥 "+SITE,W/2,108);
+ rr(c,60,150,960,1040,40);c.fillStyle="#fffdf5";c.fill();
+ c.lineWidth=8;c.strokeStyle="#f2b134";c.stroke();
+ rr(c,76,166,928,1008,30);c.lineWidth=3;c.stroke();
+ c.fillStyle="#5d6483";c.font="600 38px "+FF;c.fillText("অলসতা সনদ",W/2,250);
+ var fs=88;c.font="700 "+fs+"px "+FF;
+ while(c.measureText(card.name).width>840&&fs>36){fs-=4;c.font="700 "+fs+"px "+FF}
+ c.fillStyle="#2b3a67";c.fillText(card.name,W/2,350);
+ c.fillStyle="#5d6483";c.font="600 38px "+FF;c.fillText("এর অলসতার পরিমাণ",W/2,412);
+ c.fillStyle="#d94f30";c.font="700 230px "+FF;c.fillText(card.pct+"%",W/2,640);
+ var bx=170,by=720,bw=740,bh=46,fw=bw*card.pn/100;
+ rr(c,bx,by,bw,bh,23);c.fillStyle="#e6e9f3";c.fill();
+ if(fw>0){c.save();rr(c,bx,by,bw,bh,23);c.clip();c.fillStyle="#f2b134";c.fillRect(bx,by,fw,bh);
+  c.strokeStyle="#f7c960";c.lineWidth=12;for(var k=-60;k<fw+60;k+=36){c.beginPath();c.moveTo(bx+k,by+bh);c.lineTo(bx+k+bh,by);c.stroke()}c.restore()}
+ rr(c,bx,by,bw,bh,23);c.lineWidth=5;c.strokeStyle="#2b3a67";c.stroke();
+ c.font="54px "+FF;c.fillStyle="#000";c.fillText("🦥",bx+Math.min(Math.max(fw,30),bw-30),by-8);
+ c.fillStyle="#2b3a67";c.font="700 58px "+FF;
+ var tl=wrapT(c,"উপাধি: "+card.title,860),ty=848;
+ tl.forEach(function(t,i){c.fillText(t,W/2,ty+i*70)});
+ var ny=ty+(tl.length-1)*70+34;
+ var rl=card.rhyme.split("\n");
+ c.font="600 46px "+FF;
+ var bh2=rl.length*64+44;
+ rr(c,120,ny,840,bh2,22);c.fillStyle="#fff3d6";c.fill();
+ c.fillStyle="#1f2544";
+ rl.forEach(function(t,i){c.fillText(t,W/2,ny+64+i*64-8)});
+ c.fillStyle="#5d6483";c.font="400 32px "+FF;c.fillText(card.date,W/2,ny+bh2+58);
+ c.fillStyle="#fff";c.font="700 44px "+FF;c.fillText("আপনিও নাম লিখে সনদ নিন!",W/2,1262);
+ c.fillStyle="#f2b134";c.font="600 38px "+FF;c.fillText(SITE,W/2,1312);
+ return cv;
+}
+function makePhoto(){
+ if(!card)return;
+ var b=$("ph");b.textContent="বানানো হচ্ছে…";
+ var go=function(){
+  var cv=drawCard();
+  cv.toBlob(function(bl){
+   if(!bl){b.textContent="ফটোকার্ড বানান 🖼️";alert("ছবি বানানো যায়নি, আবার চেষ্টা করুন।");return}
+   if(blobUrl)URL.revokeObjectURL(blobUrl);
+   blobUrl=URL.createObjectURL(bl);
+   try{blobFile=new File([bl],"olosmeter-sonod.png",{type:"image/png"})}catch(e){blobFile=null}
+   $("pimg").src=blobUrl;$("pv").className="show";
+   $("shr").style.display=(blobFile&&navigator.canShare&&navigator.canShare({files:[blobFile]}))?"block":"none";
+   b.textContent="আবার বানান 🖼️";
+   $("pv").scrollIntoView({behavior:"smooth",block:"nearest"});
+  },"image/png");
+ };
+ var txt=card.name+card.pct+card.title+card.rhyme+card.date+"অলসতা সনদএরপরিমাণউপাধিআপনিও নাম লিখে সনদ নিন০১২৩৪৫৬৭৮৯";
+ if(document.fonts&&document.fonts.load){
+  Promise.all([document.fonts.load("700 40px 'Hind Siliguri'",txt),document.fonts.load("600 40px 'Hind Siliguri'",txt),document.fonts.load("400 40px 'Hind Siliguri'",txt)]).then(go,go)
+ }else{go()}
+}
+$("ph").onclick=makePhoto;
+$("sv").onclick=function(){
+ if(!blobUrl)return;
+ var a=document.createElement("a");a.href=blobUrl;a.download="olosmeter-sonod.png";document.body.appendChild(a);a.click();document.body.removeChild(a);
+};
+$("shr").onclick=function(){
+ if(blobFile&&navigator.share){navigator.share({files:[blobFile],title:"আমার অলসতা সনদ",text:LINK_TEXT+" "+location.href}).catch(function(){})}
+};
 </script>
 </body>
 </html>
