@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>আপনি কত % অলস? অলসতা সনদ নিন</title>
+<meta name="description" content="নাম লিখুন, পেয়ে যান আপনার মজার অলসতা সনদ। ছন্দসহ রেজাল্ট বন্ধুদের সাথে শেয়ার করুন!">
+<meta property="og:title" content="আপনি কত % অলস? অলসতা সনদ নিন">
+<meta property="og:description" content="নাম লিখুন, ছন্দসহ অলসতা সনদ পান। বন্ধুদের চ্যালেঞ্জ করুন!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1f2544;--bg:#eef1f7;--kantha:#2b3a67;--gold:#f2b134;--chili:#d94f30;--leaf:#2f9e6b;--mute:#5d6483}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Hind Siliguri',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:18px;line-height:1.55}
+.hero{background:var(--kantha);color:#fff;text-align:center;padding:26px 16px 86px;position:relative;border-bottom:8px dashed var(--gold)}
+.sloth{font-size:64px;line-height:1;display:inline-block;animation:sway 4s ease-in-out infinite}
+.zz{position:absolute;top:22px;right:calc(50% - 90px);font-size:26px;font-weight:700;color:var(--gold);opacity:.9}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+h1{font-size:clamp(30px,8.5vw,44px);line-height:1.15;margin:8px 0 6px}
+.hero p{margin:0 auto;max-width:24em;color:#d6def5}
+main{max-width:460px;margin:-56px auto 0;padding:0 14px 40px;position:relative;z-index:1}
+.card{background:#fff;border-radius:18px;padding:20px 18px;box-shadow:0 12px 30px rgba(31,37,68,.18)}
+label{font-weight:700;display:block;margin-bottom:6px}
+input[type=text]{width:100%;padding:14px;font:inherit;border:3px solid var(--kantha);border-radius:12px;color:var(--ink);background:#fff}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18px;cursor:pointer;color:#fff;width:100%}
+.go{background:var(--chili);margin-top:12px;font-size:20px}
+.go:active{transform:translateY(2px)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.err{color:var(--chili);min-height:1.4em;margin:6px 0 0;font-size:15px}
+#out{display:none;margin-top:22px}
+#out.show{display:block}
+.cert{background:#fffdf5;border:5px double var(--gold);border-radius:14px;padding:22px 16px 18px;text-align:center;position:relative}
+.ct{font-size:15px;color:var(--mute);margin:0;letter-spacing:.5px}
+.cn{font-size:30px;font-weight:700;color:var(--kantha);margin:2px 0 0;word-break:break-word}
+.cs{margin:0;color:var(--mute);font-size:16px}
+.pct{font-size:78px;font-weight:700;line-height:1.05;color:var(--chili);margin:6px 0 2px}
+.track{position:relative;margin:26px 8px 8px}
+.meter{height:18px;border-radius:99px;background:#e6e9f3;overflow:hidden;border:2px solid var(--kantha)}
+.fill{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--gold) 0 10px,#f7c960 10px 20px);transition:width 1.4s ease-out}
+.mark{position:absolute;top:-24px;left:0;font-size:26px;transform:translateX(-50%);transition:left 1.4s ease-out}
+.title{font-size:26px;font-weight:700;color:var(--kantha);margin:16px 0 8px}
+.rhyme{background:#fff3d6;border-radius:12px;padding:10px 12px;font-weight:600;margin:0 0 10px}
+.line{margin:0 0 8px}
+.quote{font-size:15px;color:var(--mute);border-top:1px dashed var(--line,#cdd3e6);padding-top:10px;margin:12px 0 0}
+.date{font-size:13px;color:var(--mute);margin:10px 0 0}
+.stamp{position:absolute;right:10px;bottom:56px;width:78px;height:78px;border:3px solid var(--chili);border-radius:50%;color:var(--chili);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:14px;line-height:1.15;transform:rotate(-14deg);opacity:.85;background:rgba(255,253,245,.7)}
+.share{display:grid;gap:8px;margin-top:16px}
+.wa{background:var(--leaf)}.fb{background:#1877f2}.cp{background:var(--kantha)}.again{background:#fff;color:var(--kantha);border:3px solid var(--kantha)}
+.note{font-size:13px;color:var(--mute);text-align:center;margin:18px 0 0}
+@media(max-width:380px){.stamp{display:none}}
+@media(prefers-reduced-motion:reduce){.sloth{animation:none}.fill,.mark{transition:none}}
+</style>
+</head>
+<body>
+<div class="hero">
+<span class="zz" aria-hidden="true">Zzz</span>
+<div class="sloth" aria-hidden="true">🦥</div>
+<h1>আপনি কত % অলস?</h1>
+<p>নাম লিখুন, পেয়ে যান আপনার নিজস্ব অলসতা সনদ। বন্ধুদের নামও চেক করুন!</p>
+</div>
+
+<main>
+<div class="card">
+<label for="nm">আপনার নাম</label>
+<input id="nm" type="text" maxlength="30" autocomplete="off" placeholder="যেমন: রাকিব">
+<p class="err" id="err" role="alert"></p>
+<button class="go" id="go">সনদ বের করুন 📜</button>
+
+<div id="out" aria-live="polite">
+<div class="cert">
+<p class="ct">অলসতা সনদ</p>
+<p class="cn" id="who"></p>
+<p class="cs">এর অলসতার পরিমাণ</p>
+<div class="pct"><span id="num">0</span>%</div>
+<div class="track"><span class="mark" id="mark" aria-hidden="true">🦥</span><div class="meter"><div class="fill" id="fill"></div></div></div>
+<div class="title" id="ttl"></div>
+<p class="rhyme" id="rh"></p>
+<p class="line" id="ln"></p>
+<p class="quote" id="qt"></p>
+<p class="date" id="dt"></p>
+<div class="stamp" aria-hidden="true">সত্যায়িত<br>অলস</div>
+</div>
+<div class="share">
+<button class="wa" id="wa">হোয়াটসঅ্যাপে পাঠান</button>
+<button class="fb" id="fb">ফেসবুকে শেয়ার করুন</button>
+<button class="cp" id="cp">লিংকসহ লেখা কপি করুন</button>
+<button class="again" id="again">আরেকজনের নাম দিন</button>
+</div>
+</div>
+</div>
+<p class="note">এটা শুধুই মজার জন্য। রেজাল্ট নামের উপর নির্ভর করে, তাই একই নামে একই ফল আসবে।</p>
+</main>
+
+<script>
+/* ===== এখানে নিজের মতো বদলাতে পারবেন ===== */
+var RESULTS = [
+ {max:20, t:"জেগে থাকা যোদ্ধা", r:"ভোর না হতেই ওঠেন জেগে,\nকাজের পিছে চলেন বেগে।", l:["ভোর ৫টায় উঠে ব্যায়াম করেন বলে শুনেছি। বিশ্বাস হয় না!","আপনার অ্যালার্ম একবার বাজলেই কাজ শেষ।","এত পরিশ্রম দেখে বিছানা কাঁদছে।"]},
+ {max:40, t:"প্রায় কর্মঠ", r:"কাজ করেন ঠিকঠাক,\nদুপুরে তবু নাক-ডাক।", l:["কাজ করেন, তবে রবিবারের ছুটিটা পবিত্র মনে করেন।","দুপুরের ঘুমটা আপনার মৌলিক অধিকার।","মাঝেমধ্যে 'আরেকটু পরে' বলেন, বেশিরভাগ সময় করে ফেলেন।"]},
+ {max:60, t:"আধা-অলস, আধা-ঘুমন্ত", r:"আজ নয় ভাই, কালকে হবে,\nকাল এলে ফের পরশু তবে।", l:["কাজ আছে বলে বসেছেন, ফোন হাতে নিয়ে অর্ধেক সময় শেষ।","'আজ নয়, কাল' আপনার প্রিয় বাক্য।","চায়ের কাপ হাতে থাকলে পৃথিবী থেমে যায়।"]},
+ {max:80, t:"বিছানার স্থায়ী বাসিন্দা", r:"বালিশ-কাঁথা পরম সুখ,\nউঠলে পরেই যত দুখ।", l:["বিছানা আপনাকে চেনে, আপনিও বিছানাকে চেনেন। পরস্পরের প্রতি অঙ্গীকারবদ্ধ।","রিমোট হাতে থাকলে আর কিছু লাগে না।","পানি আনতে বললে মনে হয় পাহাড় ডিঙাতে বলা হলো।"]},
+ {max:100, t:"অলসদের সম্রাট", r:"ঘুমের দেশে সিংহাসন,\nহাই তুলে রাজ্য শাসন।", l:["আপনার সামনে অলসতাও লজ্জা পায়।","এই রেজাল্ট দেখতেও নিশ্চয়ই অনেক কষ্ট হয়েছে।","সিংহাসন বলতে একটা বালিশই যথেষ্ট।"]}
+];
+var QUOTES = [
+ "আজকের অলস বাণী: অ্যালার্ম বাজে, আমি স্নুজ করি, ইতিহাস গড়ি।",
+ "আজকের অলস বাণী: সবচেয়ে কঠিন কাজ সকালে বিছানা ছাড়া।",
+ "আজকের অলস বাণী: কাজ কাল করব ভেবে আজ ঘুমাই, কালও তাই।",
+ "আজকের অলস বাণী: যার হাতে চা, তার কাছে সময় থেমে যায়।"
+];
+var LINK_TEXT = "আপনিও নাম লিখে সনদ নিন!";
+/* ====================================== */
+var $=function(i){return document.getElementById(i)};
+function hash(s){var h=5381;for(var i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))>>>0}return h}
+function toBn(n){return n.toLocaleString("bn-BD")}
+var current="";
+function measure(){
+ var name=$("nm").value.trim();
+ if(!name){$("err").textContent="আগে নাম লিখুন।";$("nm").focus();return}
+ $("err").textContent="";
+ var h=hash(name.toLowerCase()), pct=h%101, r=RESULTS[RESULTS.length-1];
+ for(var i=0;i<RESULTS.length;i++){if(pct<=RESULTS[i].max){r=RESULTS[i];break}}
+ var line=r.l[h%r.l.length], quote=QUOTES[(h>>3)%QUOTES.length];
+ $("who").textContent=name;
+ $("ttl").textContent="উপাধি: "+r.t;
+ $("rh").innerHTML=r.r.replace("\n","<br>");
+ $("ln").textContent=line;$("qt").textContent=quote;
+ $("dt").textContent="তারিখ: "+new Date().toLocaleDateString("bn-BD",{day:"numeric",month:"long",year:"numeric"});
+ $("out").className="show";
+ $("fill").style.width="0";$("mark").style.left="0";
+ var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+ function setBar(){$("fill").style.width=pct+"%";$("mark").style.left=Math.min(Math.max(pct,4),96)+"%"}
+ if(reduce){setBar();$("num").textContent=toBn(pct)}
+ else{
+  setTimeout(setBar,30);
+  var n=0,step=Math.max(1,Math.round(pct/40)),t=setInterval(function(){
+   n=Math.min(pct,n+step);$("num").textContent=toBn(n);if(n>=pct)clearInterval(t)},35);
+ }
+ current=name+" "+toBn(pct)+"% অলস! উপাধি: "+r.t+" 🦥\n"+r.r+"\n"+LINK_TEXT;
+ $("out").scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"});
+}
+$("go").onclick=measure;
+$("nm").addEventListener("keydown",function(e){if(e.key==="Enter")measure()});
+$("wa").onclick=function(){window.open("https://wa.me/?text="+encodeURIComponent(current+"\n"+location.href),"_blank")};
+$("fb").onclick=function(){window.open("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(location.href)+"&quote="+encodeURIComponent(current),"_blank")};
+$("cp").onclick=function(){
+ var txt=current+"\n"+location.href,b=$("cp");
+ function done(){b.textContent="কপি হয়েছে ✅";setTimeout(function(){b.textContent="লিংকসহ লেখা কপি করুন"},2000)}
+ if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,function(){prompt("কপি করুন:",txt)})}
+ else{prompt("কপি করুন:",txt)}
+};
+$("again").onclick=function(){$("nm").value="";$("out").className="";$("nm").focus();window.scrollTo(0,0)};
+</script>
+</body>
+</html>
